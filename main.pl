@@ -30,14 +30,13 @@ use English '-no_match_vars';
     # no_match to reduce regx effiecency loss
 
 use Tk; 
+use Tk::NoteBook; 
 
 
 #use File::stat;
 #use File::Copy;
 	#use Config;
 use Data::Dumper;
-# not needed for perl 5.6 and higher #use Symbol;
-# not needed for perl 5.6 and higher #my $SOME_FILE_HANDLER = gensym();
 
 #use pwr_library;
 #use Readonly;
@@ -105,8 +104,8 @@ sub VERSION_MESSAGE();
 
 my $OS;
 my $DEBUGLEVEL = 0;
-my %cmd_line_option;
-getopts( "hd:f:", \%cmd_line_option );
+my %cmdLineOptions;
+getopts( "hd:f:", \%cmdLineOptions );
 
 
 
@@ -116,18 +115,18 @@ local $Data::Dumper::Purity   = 1;  ##new to verify this
 
 #print Data::Dumper->Dump( [ \%Config ], [qw(Config  )] );
 
-if ( defined $cmd_line_option{h} ) {
+if ( defined $cmdLineOptions{h} ) {
     HELP_MESSAGE();
     exit(15);
 }
 
-if ( defined $cmd_line_option{d} )  {
- 	$DEBUGLEVEL =   $cmd_line_option{d} ;
+if ( defined $cmdLineOptions{d} )  {
+ 	$DEBUGLEVEL =   $cmdLineOptions{d} ;
  
 }
 
-#if ( defined $cmd_line_option{f} )  {
-# something =   $cmd_line_option{f} ;
+#if ( defined $cmdLineOptions{f} )  {
+# something =   $cmdLineOptions{f} ;
 #	<+INPUTOPTIONS+>
 #}
 
@@ -147,8 +146,8 @@ my $mainWin = MainWindow->new;
 #$button->configure( -method => sub {exit} );
 #
 $mainWin->title("Heelo World");
-my $button1 = $mainWin->Button( -text => "Done", -command => sub{ exit} )->pack;
-my $button2 = $mainWin->Button( -text => "Done", -command => sub{ exit} )->pack;
+my $button1 = $mainWin->Button( -text => "Done", -command => sub{ exit} )->pack(-side => 'right');
+my $button2 = $mainWin->Button( -text => "End", -command => sub{ exit} )->pack(-side => 'left');
 
 if ( $DEBUGLEVEL ) {
  	my @list = $mainWin->packSlaves( ); 
@@ -160,11 +159,13 @@ if ( $DEBUGLEVEL ) {
 my $nb = $mainWin->NoteBook( )->pack(-expand => 1, -fill => 'both');	# Notebook Object
 # Page 1 on the notebook, with button on that page 
 my $reportPage = $nb->add('Report', -label => 'Report');
+   $reportPage->Button(-text => 'Battle')->pack( );
    $reportPage->Button(-text => 'Click me!')->pack( );
 # # Empty page 2 
 my $mapPage    =  $nb->add('Map', -label => 'Map');
 my $techPage   =  $nb->add('Technology', -label => 'Technology');
 my $planetPage =  $nb->add('Planet', -label => 'Planet');
+my $endPage    =  $nb->add('End', -label => 'End Turn');
 MainLoop; 
 
 

@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE: player.t
+#         FILE: planet.t
 #
 #  DESCRIPTION: 
 #
@@ -22,32 +22,22 @@ use Test::More;   # tests => 1;                      # last test to print
 
 
 
-use_ok( 'player' );
+use_ok( 'planet' );
 
 
-my $testPlayer = player->new('name' => "Paul");
+my $testPlanet = planet->new('name' => "Paul");
 
-if ( defined $testPlayer ) { 
+if ( defined $testPlanet ) { 
     pass( "Initiate new object");
 } else {
     fail( "Initiate new object");
     done_testing();
 }
 
-is( ref $testPlayer , "player", "Verifying object is created");
+is( ref $testPlanet , "planet", "Verifying object is created");
 
-print $testPlayer->toString();
+print $testPlanet->toString();
 
-# gold methods
-is( $testPlayer->gold , "0", "Initial gold");
-is( $testPlayer->gold(10) , "10", "set gold to 10");
-is( $testPlayer->canSpendGold(1) , "1", "Spend 1 gold");
-is( $testPlayer->gold , "9", "How much gold");
-is( $testPlayer->canSpendGold(10) , "0", "Spend too much gold");
-is( $testPlayer->gold , "9", "How much gold");
-
-is( $testPlayer->receiveGold(10) , "19", "Receive 10 gold");
-is( $testPlayer->gold , "19", "How much gold");
 
 done_testing();
 

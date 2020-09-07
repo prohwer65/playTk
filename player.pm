@@ -18,70 +18,69 @@
 use strict;
 use warnings;
 use utf8;
+use Data::Dumper;
 
 
 
 package player;
 
 
+use Moose;
+use Moose::Util::TypeConstraints;
+
+use parent 'myParentOOP';
+
+has 'name'          => ( is => 'ro', isa => "Str" );
+has 'isAlive'       => ( is => 'rw', isa => "Bool", default => 1 );
+has 'techLevel'     => ( is => 'rw', isa => "Int",  default => 1 );
+has 'gold'          => ( is => 'rw', isa => "Int",  default => 0 );
+has 'homePlanet'    => ( is => 'ro', isa => "Str" );
+has 'numberOfShips' => ( is => 'rw', isa => "Int", default => 0 );
 
 
-sub new {
-	my  $class  = shift;
-	my  $self   = {
-		'name'  => $_[0],
-		'isAlive' => 1,
-		'techLevel' => 1,
-		'gold' => 1,
-		'homePlanet' => 1,
-		'numberOfShips' => 1,
-		'listOfPlanets' = undef,
+enum 'playerTypes' => [qw( Human Comp2 Comp3 Comp4 Comp5 )];
+has 'playerType'    => ( is => 'ro', isa => "playerTypes", default => "Human" );
 
 
-		@_,
-	};
-	bless( $self, $class );
-	return $self;
+
+
+
+# gold methods 
+sub receiveGold {
+    my $self = shift; 
+    my $goldReceived = shift; 
+
+
+    $self->{gold} += $goldReceived;
+
+    return $self->{gold} ;
 
 }
 
 
-sub toString {
-	my $self = shift; 
+#===  FUNCTION  ================================================================
+#         NAME: canSpendGold
+#      PURPOSE: checks to see if X gold pieces can be spent.
+#               Returns 0 if you can't. No change is made.
+#               Returns 1 if you can and subtracts the spend gold. 
+#   PARAMETERS: ????
+#      RETURNS: ????
+#  DESCRIPTION: ????
+#       THROWS: no exceptions
+#     COMMENTS: none
+#     SEE ALSO: n/a
+#===============================================================================
+sub canSpendGold {
+    my $self = shift; 
+    my $goldToSpend = shift; 
 
-    local $Data::Dumper::Sortkeys = 1;
-    local $Data::Dumper::Purity   = 1;  ##new to verify this
+    return 0 if ( $goldToSpend > $self->gold);
 
+    $self->{gold} -= $goldToSpend;
 
-    my $string    = Data::Dumper->Dump( [ \$self ], [qw(self  )] );
+    return 1;
 
-	return $string;
 }
-
-
-sub getValue {
-	my $self = shift; 
-	my $valueName = shift; 
-
-	return $self->{ $valueName };
-}
-
-sub setValue {
-	my $self = shift; 
-	my $valueName = shift; 
-	my ($value) = shift; 
-
-	$self->{ $valueName }  = $value;
-	return $self->{ $valueName };
-}
-
-
-
-
-
-
-
-
 
 
 
