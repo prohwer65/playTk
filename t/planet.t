@@ -25,7 +25,7 @@ use Test::More;   # tests => 1;                      # last test to print
 use_ok( 'planet' );
 
 
-my $testPlanet = planet->new('name' => "Paul");
+my $testPlanet = planet->new('name' => "earth", class => "A", availSpaces => 5);
 
 if ( defined $testPlanet ) { 
     pass( "Initiate new object");
@@ -35,6 +35,22 @@ if ( defined $testPlanet ) {
 }
 
 is( ref $testPlanet , "planet", "Verifying object is created");
+
+
+# build Factories
+is( $testPlanet->availSpaces, 5, "Checking initial availSpaces");
+is( $testPlanet->removeFactory(), 0, "Attempt to remove none existing factories");
+is( $testPlanet->buildFactory(), 1, "Buid one factory");
+is( $testPlanet->buildFactory(5), 0, "Attempt to build too many factories");
+
+# build Research
+is( $testPlanet->removeResearch(), 0, "Attempt to remove none existing Research");
+is( $testPlanet->buildResearch(), 1, "Buid one Research");
+is( $testPlanet->buildResearch(5), 0, "Attempt to build too many Research");
+
+
+is( $testPlanet->zloc(5), 5, "Setting a Z location");
+is( $testPlanet->zloc(5.5), 5.5, "Setting a Z location");
 
 print $testPlanet->toString();
 
